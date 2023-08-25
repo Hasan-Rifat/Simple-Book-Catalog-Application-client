@@ -3,30 +3,35 @@ import { apiSlice } from "../../api/apiSlice";
 const bookApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllBooks: builder.query({
-      query: () => `/books`,
+      query: () => `/book`,
+      providesTags: ["book"],
     }),
     getBookSingleBook: builder.query({
-      query: (id) => `/books/${id}`,
+      query: (id) => `/book/${id}`,
+      providesTags: ["book"],
     }),
-    createBook: builder.mutation({
+
+    createNewBook: builder.mutation({
       query: (body) => ({
-        url: `/books`,
+        url: `/book`,
         method: "POST",
         body,
       }),
     }),
     updateBook: builder.mutation({
-      query: ({ email, body }) => ({
-        url: `/books/${email}`,
+      query: (body) => ({
+        url: `/book/${body.id}`,
         method: "PATCH",
         body,
       }),
+      invalidatesTags: ["book"],
     }),
     deleteBook: builder.mutation({
       query: (id) => ({
-        url: `/books/${id}`,
+        url: `/book/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["book"],
     }),
   }),
 });
@@ -34,7 +39,7 @@ const bookApi = apiSlice.injectEndpoints({
 export const {
   useGetAllBooksQuery,
   useGetBookSingleBookQuery,
-  useCreateBookMutation,
+  useCreateNewBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
 } = bookApi;

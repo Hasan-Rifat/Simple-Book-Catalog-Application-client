@@ -6,7 +6,8 @@ const readingListApi = apiSlice.injectEndpoints({
       query: () => `/reading-list`,
     }),
     getReadingListSingleReadingList: builder.query({
-      query: (id) => `/reading-list/${id}`,
+      query: (email) => `/reading-list/${email}`,
+      providesTags: ["readingList"],
     }),
     createReadingList: builder.mutation({
       query: (body) => ({
@@ -14,13 +15,18 @@ const readingListApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["readingList"],
     }),
     updateReadingList: builder.mutation({
-      query: ({ email, body }) => ({
-        url: `/reading-list/${email}`,
+      query: (body) => ({
+        url: `/reading-list/${body.id}`,
         method: "PATCH",
         body,
       }),
+      onQueryStarted: async ({ email, status, bookId, id }) => {
+        console.log("onQueryStarted", email, status, bookId, id);
+      },
+      invalidatesTags: ["readingList"],
     }),
     deleteReadingList: builder.mutation({
       query: (id) => ({

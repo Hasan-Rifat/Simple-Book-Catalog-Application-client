@@ -7,6 +7,7 @@ export const apiSlice = createApi({
     baseUrl: "https://simple-book-catalog-application-server.vercel.app/api/v1",
   }),
   endpoints: () => ({}),
+  tagTypes: ["wishlist", "readingList", "book"],
 });
 
 // Export hooks for usage in functional components, which are

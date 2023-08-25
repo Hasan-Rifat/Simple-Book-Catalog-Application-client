@@ -26,5 +26,5 @@ export default {
       maxmd: { max: "768px" },
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

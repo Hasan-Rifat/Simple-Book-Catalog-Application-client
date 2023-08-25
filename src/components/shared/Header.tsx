@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { CgChevronDownO } from "react-icons/cg";
 import { Link } from "react-router-dom";
-import Loading from "./Loading";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { logOut } from "../../app/features/user/userSlice";
+import { AiOutlineHeart, AiFillRead } from "react-icons/ai";
+import { toast } from "react-hot-toast";
 
 const Header: React.FC = () => {
-  const [user, setUser] = useState(true);
+  const { data } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const [mobile, SetMobile] = useState<boolean>(false);
   const [color, setColor] = useState<boolean>(false);
   const [dashboard, setDashboard] = useState<boolean>(false);
 
-  const logout = () => {};
+  const logout = () => {
+    toast.success("Logout Successfully", {
+      id: "logout",
+    });
+    dispatch(logOut());
+  };
 
   // menu
   const menu: JSX.Element = (
@@ -18,48 +27,55 @@ const Header: React.FC = () => {
         <Link to={"/"}>Home </Link>
       </li>
       <li className="mr-[10px] p-[10px] text-primary">
-        <Link to={"/our-portfolio"}>Our Portfolio</Link>
+        <Link to={"/all-book"}>All Book</Link>
       </li>
-      <li className="mr-[10px] p-[10px] text-primary">
-        <Link to={"/our-services"}>Our Services</Link>
-      </li>
-      <li className="mr-[10px] p-[10px] text-primary">
-        <Link to={"/contact-us"}>Contact Us</Link>
-      </li>
-      {user ? (
-        <div className="relative flex justify-center items-center ">
-          <div
-            onClick={() => setDashboard(!dashboard)}
-            className="cursor-pointer flex gap-2 items-center  online "
-          >
-            {user && (
-              <div className=" rounded-full  text-red-600 bg-primary">
-                <h2 className="font-bold text-[18px] text-center px-[15px]">
-                  {user}
-                </h2>
-              </div>
-            )}
-            <CgChevronDownO className="cursor-pointer " />
-          </div>
-          <div
-            className={`${
-              dashboard ? "block" : "hidden"
-            } cursor-pointer flex flex-col mr-[10px] p-[15px] shadow-2xl bg-white absolute top-[110%] right-0 `}
-          >
-            <li className="mt-[10px]">
-              <Link to={"/dashboard"}>
-                <span>Dashboard</span>
-              </Link>
-            </li>
-            <li className="mt-[10px]" onClick={logout}>
-              <span>Log Out</span>
-            </li>
+
+      {data ? (
+        <div className="flex items-center justify-center">
+          <li className="mr-[10px] p-[10px] text-primary">
+            <Link className="text-[#fb6f84] " to={"/wish-list"}>
+              <AiOutlineHeart size={25} className="font-bold" />
+            </Link>
+          </li>
+          <li className="mr-[10px] p-[10px] text-primary">
+            <Link className="text-[#0ca6e8] " to={"/reading-list"}>
+              <AiFillRead size={25} className="font-bold" />
+            </Link>
+          </li>
+          <div className="relative flex justify-center items-center ">
+            <div
+              onClick={() => setDashboard(!dashboard)}
+              className="cursor-pointer flex gap-2 items-center  online "
+            >
+              {data && (
+                <div className=" rounded-full  text-red-600 bg-primary">
+                  <h2 className="font-bold text-[18px] text-center px-[15px]">
+                    {data.firstName} {data.lastName}
+                  </h2>
+                </div>
+              )}
+              <CgChevronDownO className="cursor-pointer " />
+            </div>
+
+            <div className={`${dashboard ? "block" : "hidden"} `}>
+              <button
+                className="mt-[10px] rounded-full  text-white bg-primary cursor-pointer flex flex-col mr-[10px] px-[20px] py-1 shadow-2xl  absolute top-[110%] right-0 "
+                onClick={logout}
+              >
+                <span>Log Out</span>
+              </button>
+            </div>
           </div>
         </div>
       ) : (
-        <Link to={"/login"}>
-          <button>Login</button>
-        </Link>
+        <>
+          <li className="mr-[10px] p-[10px] text-primary">
+            <Link to={"/login"}>Login</Link>
+          </li>
+          <li className="mr-[10px] p-[10px] text-primary">
+            <Link to={"/register"}>Register</Link>
+          </li>
+        </>
       )}
     </>
   );
@@ -85,7 +101,9 @@ const Header: React.FC = () => {
         <div>
           <div className="sm:p-[10px] lg:p-[20px] grid grid-cols-4">
             <div className="col-span-1 relative">
-              <Link to={"/"}>eBook</Link>
+              <Link to={"/"}>
+                <span className="font-bold text-2xl">eBook</span>
+              </Link>
             </div>
             {/* mobile responsive start */}
             <div
