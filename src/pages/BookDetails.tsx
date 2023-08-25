@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  useDeleteBookMutation,
   useGetBookSingleBookQuery,
   useUpdateBookMutation,
 } from "../app/features/book/bookApiSlice";
@@ -8,12 +9,15 @@ import Loading from "../components/shared/Loading";
 import { FiSend } from "react-icons/fi";
 import { useAppSelector } from "../app/hooks";
 import { toast } from "react-hot-toast";
+import { BiSolidMessageEdit } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
 
 type BookDetailsProps = {};
 
 const BookDetails: React.FC<BookDetailsProps> = () => {
+  const navigate = useNavigate();
   const { data: user } = useAppSelector((state) => state.user);
-
+  const [deleteBook] = useDeleteBookMutation();
   const [inputValue, setInputValue] = useState<string>("");
 
   const { id } = useParams();
@@ -34,7 +38,27 @@ const BookDetails: React.FC<BookDetailsProps> = () => {
   }
   if (!isLoading && !error && data?.data) {
     content = (
-      <div className="p-10 shadow-xl">
+      <div className="p-10 shadow-xl relative">
+        {user?.email === data?.data.email && (
+          <div className="flex justify-end absolute top-[5%] right-[5%] flex-col">
+            <Link
+              className="cursor-pointer"
+              to={`/update-book/${data.data._id}`}
+            >
+              <span className="text-[#fb6f84]">
+                <BiSolidMessageEdit size={35} />
+              </span>
+            </Link>
+            <div>
+              <button
+                onClick={() => deleteBookHandler(data?.data._id)}
+                className="text-[#fb6f84]"
+              >
+                <MdDeleteForever size={45} />
+              </button>
+            </div>
+          </div>
+        )}
         <h2 className="text-sm title-font text-gray-500 tracking-widest">
           genre: {data?.data?.genre}
         </h2>
@@ -166,6 +190,14 @@ const BookDetails: React.FC<BookDetailsProps> = () => {
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
+  };
+
+  const deleteBookHandler = (id: string) => {
+    deleteBook(id);
+    toast.success("Book deleted", {
+      id: "delete-book",
+    });
+    navigate("/");
   };
 
   return (
