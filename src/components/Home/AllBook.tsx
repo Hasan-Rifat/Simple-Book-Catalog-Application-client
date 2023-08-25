@@ -45,10 +45,16 @@ const AllBook: React.FC = () => {
   };
 
   const deleteBookHandler = (id: string) => {
-    deleteBook(id);
-    toast.success("Book deleted", {
-      id: "delete-book",
-    });
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this book?"
+    );
+
+    if (shouldDelete) {
+      deleteBook(id);
+      toast.success("Book deleted", {
+        id: "delete-book",
+      });
+    }
   };
 
   const addReadingList = (id: string) => {

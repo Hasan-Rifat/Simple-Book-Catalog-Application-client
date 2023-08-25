@@ -193,11 +193,17 @@ const BookDetails: React.FC<BookDetailsProps> = () => {
   };
 
   const deleteBookHandler = (id: string) => {
-    deleteBook(id);
-    toast.success("Book deleted", {
-      id: "delete-book",
-    });
-    navigate("/");
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this book?"
+    );
+
+    if (shouldDelete) {
+      deleteBook(id);
+      toast.success("Book deleted", {
+        id: "delete-book",
+      });
+      navigate("/");
+    }
   };
 
   return (
