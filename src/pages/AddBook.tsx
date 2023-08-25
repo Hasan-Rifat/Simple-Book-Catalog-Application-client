@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useCreateNewBookMutation } from "../app/features/book/bookApiSlice";
 import { toast } from "react-hot-toast";
-import { useAppSelector } from "../app/hooks";
-import { Navigate, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 const AddBook: React.FC = () => {
-  const { data: user } = useAppSelector((state) => state.user);
   const [formData, setFormData] = useState({
     title: "",
     author: "",

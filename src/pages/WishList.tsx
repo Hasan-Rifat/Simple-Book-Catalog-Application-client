@@ -3,7 +3,6 @@ import { useAppSelector } from "../app/hooks";
 import {
   useDeleteWishListMutation,
   useGetWishListSingleWishListQuery,
-  useUpdateWishListMutation,
 } from "../app/features/wishList/wishListApiSlice";
 import Loading from "../components/shared/Loading";
 import { toast } from "react-hot-toast";
